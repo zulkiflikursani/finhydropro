@@ -1,6 +1,6 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
-
+import { unstable_noStore as noStore } from "next/cache";
 interface Product {
   id: number;
   kode_produk: string;
@@ -25,6 +25,7 @@ export const fetchProduct = async (
 ): Promise<FetchProductResponse> => {
   const prisma = new PrismaClient();
   const query = "";
+  noStore();
   try {
     const bulan = currentDate.getMonth() + 1;
     const tahun = currentDate.getFullYear();
