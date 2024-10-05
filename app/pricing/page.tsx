@@ -3,6 +3,7 @@ import ProductCard from "@/components/pricing/ProductCard";
 
 export default async function PricingPage() {
   const produk = await fetchProduct("");
+  console.log(produk);
   if (produk instanceof Error) {
     return <div>Error: {produk.message}</div>; // Display error message
   }
