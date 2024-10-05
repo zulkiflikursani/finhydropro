@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { sign } from "crypto";
 
 function Home() {
   const { data: session } = useSession();
@@ -60,6 +61,12 @@ function Home() {
             href={siteConfig.links.product}
           >
             Produk
+          </Link>
+          <Link
+            href={"/registrasi"}
+            className="bg-green-600 py-2 rounded-full text-foreground-100 px-4 shadow-md shadow-foreground-400 hover:bg-foreground-400 hover:text-foreground-800"
+          >
+            Register
           </Link>
         </div>
       </section>

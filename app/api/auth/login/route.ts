@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcryptjs";
 import React from "react";
 
 interface ReqType {
@@ -14,8 +14,6 @@ export async function POST(req: NextRequest) {
     // Extract email and password from the request body
     const { email, password }: ReqType = await req.json();
     // Query the user from the database by email
-    console.log("Received email:", email);
-    console.log("Received password:", password); // Avoid logging actual passwords in production
 
     const user = await prisma.tb_user_customer.findFirst({
       where: {

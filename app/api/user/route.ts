@@ -1,20 +1,22 @@
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST(req: Request) {
+  const { nama, email, level, customer_company, no_telepon, alamat, password } =
+    await req.json();
   const prisma = new PrismaClient();
   try {
-    const hasPassword = await hash("777888", 10);
+    // const hasPassword = await hash("777888", 10);
     const res = await prisma.tb_user_customer.create({
       data: {
-        nama: "zulkifli",
-        email: "zulkifli@gmail.com",
+        nama: nama,
+        email: email,
         level: 1,
-        customer_company: "1",
-        password: hasPassword,
-        no_telpon: "9082734981274",
-        alamat: "ajkdhfkajsh",
+        customer_company: customer_company,
+        password: password,
+        no_telpon: no_telepon,
+        alamat: alamat,
       },
     });
     return NextResponse.json({ success: true });
