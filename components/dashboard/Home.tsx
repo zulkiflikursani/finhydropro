@@ -1,26 +1,22 @@
-"use client";
 import { Link } from "@nextui-org/link";
-import { animate, color, motion } from "framer-motion";
-import { inView } from "framer-motion";
+import { motion } from "framer-motion";
 
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "../../config/site";
 import { title, subtitle } from "@/components/primitives";
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
+import InViewSection from "@/components/InViewSection";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/options";
+import React from "react";
 
-export default function Home() {
-  const { data: session } = useSession();
-
-  inView("section", (info) => {
-    const animation = animate(info.target, { opacity: 1 });
-
-    // This will fire when the element leaves the viewport
-    return (leaveInfo) => animation.stop();
-  });
+export default async function Dashboards() {
+  const data = await getServerSession(authOptions);
   return (
     <>
+      {/* <InViewSection /> */}
       <Navbar isBordered>
         <NavbarContent justify="start">
           <NavbarBrand className="mr-4 ">
@@ -36,9 +32,6 @@ export default function Home() {
             </div>
           </NavbarBrand>
         </NavbarContent>
-        {/* <NavbarContent>
-          <NavbarItem></NavbarItem>
-        </NavbarContent> */}
         <NavbarContent>
           <Input name="search" placeholder="Cari barang ..." />
         </NavbarContent>
@@ -81,7 +74,7 @@ export default function Home() {
         </section>
 
         <div className="flex gap-3">
-          {session ? (
+          {data?.user ? (
             <Button className="rounded-full" onClick={() => signOut()}>
               log out{" "}
             </Button>
