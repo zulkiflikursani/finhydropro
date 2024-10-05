@@ -62,12 +62,14 @@ function Home() {
           >
             Produk
           </Link>
-          <Link
-            href={"/registrasi"}
-            className="bg-green-600 py-2 rounded-full text-foreground-100 px-4 shadow-md shadow-foreground-400 hover:bg-foreground-400 hover:text-foreground-800"
-          >
-            Register
-          </Link>
+          {!session && (
+            <Link
+              href={"/registrasi"}
+              className="bg-green-600 py-2 rounded-full text-foreground-100 px-4 shadow-md shadow-foreground-400 hover:bg-foreground-400 hover:text-foreground-800"
+            >
+              Register
+            </Link>
+          )}
         </div>
       </section>
       <section className="flex flex-col items-center bg-repeat bg-cover bg-sectionThree text-center justify-center bg-center gap-4 py-8 min-h-screen bg-foreground-200">
