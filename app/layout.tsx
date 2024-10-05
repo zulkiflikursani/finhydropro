@@ -4,12 +4,9 @@ import clsx from "clsx";
 
 import { Providers } from "./providers";
 
-import { siteConfig } from "@/config/site";
 import { fontMono } from "@/config/fonts";
-import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
-import { Input } from "@nextui-org/input";
+
 import BottomMenu from "@/components/Bottom-menu";
-import { SessionProvider } from "next-auth/react";
 import AuthProvider from "./context/AuthProvder";
 
 const APP_NAME = "FH App";
