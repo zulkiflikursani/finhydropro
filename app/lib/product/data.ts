@@ -87,7 +87,7 @@ export const fetchProduct = async (
   } catch (error) {
     return {
       status: "fail",
-      data: error,
+      data: "",
     };
   }
 };
