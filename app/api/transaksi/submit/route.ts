@@ -1,7 +1,7 @@
 import { submitTransaksi } from "@/app/lib/penjualan/action";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function POST(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     const { data }: any = req.body; // Get the data from the request body
     const result = await submitTransaksi(data); // Call submitTransaksi

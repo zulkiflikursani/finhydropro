@@ -1,18 +1,11 @@
 import { Input } from "@nextui-org/input";
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
-import { getServerSession } from "next-auth";
-import { getServerActionDispatcher } from "next/dist/client/components/app-router";
-import { authOptions } from "../api/auth/[...nextauth]/options";
 
 export default async function AboutLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-  console.log(session);
-  const user = session?.user.email;
-  console.log(user);
   return (
     <>
       <Navbar isBordered>
