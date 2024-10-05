@@ -9,6 +9,7 @@ interface TransakiDetal {
   dekskripsi: string;
   user: string;
   kode_produk: string;
+  nama_produk: string;
   qty: number;
   harga: number;
   //   data: TypeDataPenjualan[];
@@ -36,10 +37,11 @@ function DetailTransaksi(props: Props) {
 
   return (
     <>
-      <div className="flex-col space-y-2">
+      <div className="flex-col space-y-2 text-[10px]">
         <Input
           label="Kode Transaksi"
           type="text"
+          size="sm"
           value={
             props.data && Array.isArray(props.data) && props.data.length > 0
               ? props.data[0].kode_transaksi
@@ -49,6 +51,7 @@ function DetailTransaksi(props: Props) {
         <Input
           label="Nama Customer"
           type="text"
+          size="sm"
           value={
             props.data && Array.isArray(props.data) && props.data.length > 0
               ? props.data[0].nama
@@ -56,6 +59,7 @@ function DetailTransaksi(props: Props) {
           }
         />
         <Input
+          size="sm"
           label="Nama Perusahaan"
           type="text"
           value={
@@ -65,6 +69,7 @@ function DetailTransaksi(props: Props) {
           }
         />
         <Input
+          size="sm"
           label="Alamat"
           type="text"
           value={
@@ -73,7 +78,7 @@ function DetailTransaksi(props: Props) {
               : ""
           }
         />
-        <table className=" w-full border-collapse border border-foreground-200 mt-5  mb-2 text-foreground-600">
+        <table className=" w-full border-collapse border border-foreground-200 mt-5  mb-2 text-foreground-600 ">
           <thead>
             <tr>
               <th className="py-2 border border-foreground-200">No</th>
@@ -92,16 +97,16 @@ function DetailTransaksi(props: Props) {
                     {index + 1}
                   </td>
                   <td className="text-center border border-foreground-200 ">
-                    {item.kode_produk}
+                    {item.nama_produk}
                   </td>
                   <td className="text-center border border-foreground-200 ">
-                    {item.harga}
+                    {Intl.NumberFormat().format(item.harga)}
                   </td>
                   <td className="text-center border border-foreground-200 ">
                     {-item.qty}
                   </td>
                   <td className="text-center border border-foreground-200 ">
-                    {item.harga * -item.qty}
+                    {Intl.NumberFormat().format(item.harga * -item.qty)}
                   </td>
                 </tr>
               ))}
@@ -113,7 +118,7 @@ function DetailTransaksi(props: Props) {
                 Total Tagihan
               </td>
               <td className="text-center border border-foreground-200 ">
-                {totaltagihan}
+                {Intl.NumberFormat().format(totaltagihan)}
               </td>
             </tr>
           </tbody>

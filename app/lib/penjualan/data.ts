@@ -30,24 +30,26 @@ export const getDataPenjualanByKode = async (kode_trasanksi: string) => {
   const prisma = new PrismaClient();
   try {
     const query = `SELECT
-                    tb_transaksi_header.kode_transaksi,
-                    tb_user_customer.nama,
-                    tb_user_customer.alamat,
-                    tb_user_customer.no_telpon,
-                    tb_user_customer.customer_company,
-                    tb_transaksi_header.tgl_transaksi,
-                    tb_transaksi_header.jenis_transaksi,
-                    tb_transaksi_header.deksripsi,
-                    tb_transaksi_header.user,
-                    tb_transaksi_detail.kode_produk,
-                    tb_transaksi_detail.qty,
-                    tb_transaksi_detail.harga
-                  FROM
-                    tb_transaksi_header
-                    LEFT JOIN tb_transaksi_detail ON tb_transaksi_header.kode_transaksi = tb_transaksi_detail.kode_transaksi
-                    LEFT JOIN tb_user_customer on tb_transaksi_header.user=tb_user_customer.email
-                  WHERE
-                    tb_transaksi_header.kode_transaksi = ?`;
+                  tb_transaksi_header.kode_transaksi,
+                  tb_user_customer.nama,
+                  tb_user_customer.alamat,
+                  tb_user_customer.no_telpon,
+                  tb_user_customer.customer_company,
+                  tb_transaksi_header.tgl_transaksi,
+                  tb_transaksi_header.jenis_transaksi,
+                  tb_transaksi_header.deksripsi,
+                  tb_transaksi_header.user,
+                  tb_transaksi_detail.kode_produk,
+                  tb_produk.nama_produk,
+                  tb_transaksi_detail.qty,
+                  tb_transaksi_detail.harga
+                FROM
+                  tb_transaksi_header
+                  LEFT JOIN tb_transaksi_detail ON tb_transaksi_header.kode_transaksi = tb_transaksi_detail.kode_transaksi
+                  LEFT JOIN tb_user_customer on tb_transaksi_header.user=tb_user_customer.email
+                  LEFT JOIN tb_produk on tb_produk.kode_produk and tb_produk.company=tb_transaksi_header.company
+                WHERE
+                  tb_transaksi_header.kode_transaksi = ?`;
     const data = await prisma.$queryRawUnsafe(query, kode_trasanksi);
 
     // Check if the data is an array
