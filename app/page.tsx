@@ -1,8 +1,7 @@
 "use client";
 import { Link } from "@nextui-org/link";
-import { animate, color, motion } from "framer-motion";
+import { animate, motion } from "framer-motion";
 import { inView } from "framer-motion";
-
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
