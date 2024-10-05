@@ -1,11 +1,8 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
-
 import { Providers } from "./providers";
-
 import { fontMono } from "@/config/fonts";
-
 import BottomMenu from "@/components/Bottom-menu";
 import AuthProvider from "./context/AuthProvder";
 
@@ -49,20 +46,6 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION,
   },
 };
-
-// export const viewport: Viewport = {
-//   themeColor: "#FFFFFF",
-// };
-// export const metadata: Metadata = {
-//   title: {
-//     default: siteConfig.name,
-//     template: `%s - ${siteConfig.name}`,
-//   },
-//   description: siteConfig.description,
-//   icons: {
-//     icon: "/favicon.ico",
-//   },
-// };
 
 export const viewport: Viewport = {
   themeColor: [
