@@ -14,6 +14,7 @@ import { authOptions } from "./api/auth/[...nextauth]/options";
 export default async function Home() {
   const data = await getServerSession(authOptions);
   return (
+    //te
     <>
       <InViewSection />
       <Navbar isBordered>
