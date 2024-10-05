@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 interface TypeTransaksiHeader {
   id: number;
@@ -45,9 +46,12 @@ function TabelRiwatatTransaksi(props: Props) {
                     {item.status_transaksi === "1" ? "Valid" : "Tidak Valid"}
                   </td>
                   <td className="text-center border border-foreground-200 items-center ">
-                    <div className="text-center rounded-full shadow-md shadow-gray-500 cursor-pointer bg-green-500 w-full active:bg-green-400 my-1">
+                    <Link
+                      className="text-center rounded-full shadow-md shadow-gray-500 cursor-pointer bg-green-500 w-full active:bg-green-400 my-1 px-2"
+                      href={"../transaksi/" + item.kode_transaksi}
+                    >
                       Detail
-                    </div>
+                    </Link>
                   </td>
                 </tr>
               ))
