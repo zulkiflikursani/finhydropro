@@ -124,6 +124,7 @@ function Listpesanan() {
   };
 
   const handleSubmit = async () => {
+    setIsProcessing(true); // Set isProcessing to true when submission starts
     // console.log(dataKeranjang);
     const phoneTujuan = "6282343947212";
     try {
@@ -136,16 +137,16 @@ function Listpesanan() {
               `${index + 1}. ${item.nama_produk}, ${item.qty} pcs x ${item.harga_jual} = ${(item.qty * item.harga_jual).toLocaleString()}`
           )
           .join("%0A");
-
         const message = `Purchase Order : ${response.data?.kode_transaksi}%0AID Customer : ${session.data?.user.email}%0ANama Customer: ${session.data?.user.nama}%0ANo Telpon : ${session.data?.user.no_telpon}%0A%0A${productDetails}%0A%0ATotal PO sebesar ${parseInt(totCheckout.toString()).toLocaleString()}%0ATerima kasih`;
-
         const whatsappUrl = `https://wa.me/${phoneTujuan}?text=${message}`;
         window.open(whatsappUrl, "_blank");
         setdataKeranjang([]);
+        setIsProcessing(false);
       } else {
       }
     } catch (error) {
       console.log(error);
+      setIsProcessing(false);
     }
   };
   return (
@@ -220,12 +221,13 @@ function Listpesanan() {
         </div>
       </div>
       <div className="flex justify-end">
-        <div
+        <button
           className="w-32 text-center rounded-full shadow-md shadow-gray-500 cursor-pointer bg-green-500 py-1 active:bg-green-400"
-          onClick={!isProcessing ? handleSubmit : () => {}}
+          onClick={() => !isProcessing && handleSubmit()}
+          disabled={isProcessing}
         >
           {isProcessing ? <Spinner /> : "Submit"}
-        </div>
+        </button>
       </div>
     </div>
   );
