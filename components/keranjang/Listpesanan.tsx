@@ -4,6 +4,7 @@ import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { submitTransaksi } from "@/app/lib/penjualan/action";
 import { useSession } from "next-auth/react";
+import { Spinner } from "@nextui-org/react";
 
 interface ProdukType {
   id: number;
@@ -27,6 +28,9 @@ function Listpesanan() {
   const [quantities, setQuantities] = useState<number[]>([]);
   const [totCheckout, seTotCheckout] = useState<number>(0);
   const hasMounted = useRef(false);
+  const [buttonText, setButtonText] = useState("Submit");
+  const [isProcessing, setIsProcessing] = useState(false);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const dataStorage = localStorage.getItem("dataKeranjang");
@@ -218,9 +222,9 @@ function Listpesanan() {
       <div className="flex justify-end">
         <div
           className="w-32 text-center rounded-full shadow-md shadow-gray-500 cursor-pointer bg-green-500 py-1 active:bg-green-400"
-          onClick={() => handleSubmit()}
+          onClick={!isProcessing ? handleSubmit : () => {}}
         >
-          Submit
+          {isProcessing ? <Spinner /> : "Submit"}
         </div>
       </div>
     </div>

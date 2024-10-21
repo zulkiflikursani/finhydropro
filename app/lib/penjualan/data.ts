@@ -1,11 +1,32 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
+import { unstable_noStore as noStore } from "next/cache";
 
-export const getDataPenjualan = async () => {
+/**
+ * Get all data penjualan from the database
+ * @returns Data penjualan
+ */
+export const getDataPenjualan = async (): Promise<{
+  status: number;
+  data?: any;
+  error?: string;
+}> => {
   const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      status: 401,
+      error: "Unauthorized",
+    };
+  }
+
   const prisma = new PrismaClient();
+  noStore;
   try {
+    /**
+     * Query untuk mengambil semua data penjualan dari database
+     */
     const data = await prisma.tb_transaksi_header.findMany({
       where: {
         user: session?.user.email,
@@ -17,57 +38,89 @@ export const getDataPenjualan = async () => {
         status: 200,
         data: data,
       };
-    }
-  } catch (error) {
-    return {
-      status: 500,
-      error: error,
-    };
-  }
-};
-
-export const getDataPenjualanByKode = async (kode_trasanksi: string) => {
-  const prisma = new PrismaClient();
-  try {
-    const query = `SELECT
-                  tb_transaksi_header.kode_transaksi,
-                  tb_user_customer.nama,
-                  tb_user_customer.alamat,
-                  tb_user_customer.no_telpon,
-                  tb_user_customer.customer_company,
-                  tb_transaksi_header.tgl_transaksi,
-                  tb_transaksi_header.jenis_transaksi,
-                  tb_transaksi_header.deksripsi,
-                  tb_transaksi_header.user,
-                  tb_transaksi_detail.kode_produk,
-                  tb_produk.nama_produk,
-                  tb_transaksi_detail.qty,
-                  tb_transaksi_detail.harga
-                FROM
-                  tb_transaksi_header
-                  LEFT JOIN tb_transaksi_detail ON tb_transaksi_header.kode_transaksi = tb_transaksi_detail.kode_transaksi
-                  LEFT JOIN tb_user_customer on tb_transaksi_header.user=tb_user_customer.email
-                  LEFT JOIN tb_produk on tb_produk.kode_produk and tb_produk.company=tb_transaksi_header.company
-                WHERE
-                  tb_transaksi_header.kode_transaksi = ?`;
-    const data = await prisma.$queryRawUnsafe(query, kode_trasanksi);
-
-    // Check if the data is an array
-    if (Array.isArray(data)) {
-      // Data is an array of objects, and we can safely work with it
-      const jsonData = data as { [key: string]: any }[];
-      console.log(jsonData);
-      return {
-        status: 200,
-        data: jsonData,
-      };
     } else {
-      console.log("Unexpected data format", data);
+      return {
+        status: 404,
+        error: "Data not found",
+      };
     }
   } catch (error) {
     return {
       status: 500,
-      error: error,
+      error: error as string,
     };
+  } finally {
+    await prisma.$disconnect();
   }
 };
+/**
+ * Get data penjualan by kode transaksi
+ * @param kodeTransaksi Kode transaksi yang akan diambil datanya
+ * @returns Data penjualan berdasarkan kode transaksi
+ */
+export const getDataPenjualanByKode = async (kodeTransaksi: string) => {
+  const prisma = new PrismaClient();
+  noStore;
+  try {
+    /**
+     * Query untuk mengambil data penjualan berdasarkan kode transaksi
+     * Menggunakan join 4 tabel tb_transaksi_header, tb_transaksi_detail, tb_user_customer, dan tb_produk
+     * Menggunakan parameter kode_transaksi untuk memfilter data berdasarkan kode transaksi
+     */
+    const query = `
+      SELECT
+        th.kode_transaksi,
+        th.tgl_transaksi,
+        th.jenis_transaksi,
+        th.deksripsi,
+        th.user,
+        uc.nama,
+        uc.alamat,
+        uc.no_telpon,
+        uc.customer_company,
+        td.kode_produk,
+        p.nama_produk,
+        td.qty,
+        td.harga
+      FROM
+        tb_transaksi_header th
+        LEFT JOIN tb_transaksi_detail td ON th.kode_transaksi = td.kode_transaksi
+        LEFT JOIN tb_user_customer uc ON th.user = uc.email
+        LEFT JOIN tb_produk p ON p.kode_produk = td.kode_produk AND p.company = th.company
+      WHERE
+        th.kode_transaksi = ?
+    `;
+    const data = await prisma.$queryRawUnsafe<Penjualan[]>(
+      query,
+      kodeTransaksi
+    );
+
+    return {
+      status: 200,
+      data,
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      error,
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+interface Penjualan {
+  kode_transaksi: string;
+  tgl_transaksi: string;
+  jenis_transaksi: string;
+  deksripsi: string;
+  user: string;
+  nama: string;
+  alamat: string;
+  no_telpon: string;
+  customer_company: string;
+  kode_produk: string;
+  nama_produk: string;
+  qty: number;
+  harga: number;
+}
